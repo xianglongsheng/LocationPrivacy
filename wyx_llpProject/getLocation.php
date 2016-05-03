@@ -1,13 +1,20 @@
 <?php
 //$q=$_GET["q"];
+echo "start";
+$servername = "localhost";
+$username = "root";
+$password = "Besafe";
 
-$con = mysql_connect('localhost', 'root', 'Besafe');
-if (!$con)
- {
- die('Could not connect: ' . mysql_error());
- }
+// 创建连接
+$conn = new mysqli($servername, $username, $password);
 
-mysql_select_db("llproject", $con);
+// 检测连接
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+echo "Connected successfully";
+echo "here1";
+/*mysql_select_db("llproject", $con);
 
 $sql="SELECT longitude,latitude,count(*) as count_num FROM location group by longitude,latitude";
 
@@ -30,5 +37,5 @@ while($row = mysql_fetch_array($result))
  }
 echo "</table>";
 
-mysql_close($con);
+mysql_close($con);*/
 ?>
