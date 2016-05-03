@@ -1,6 +1,6 @@
 var xmlHttp;
 function Test(){
-	document.getElementById("txtHint").innerHTML="Success";
+	document.getElementById("testHint").innerHTML="Success";
 }
 
 function getData()
@@ -13,16 +13,18 @@ if (xmlHttp==null)
  }
 var url="forTest.php";
 //url=url+"?q="+str;
-//url=url+"?sid="+Math.random();
+url=url+"?t="+Math.random();
+//document.getElementById("testHint").innerHTML="Now Here";
 xmlHttp.onreadystatechange=function()
   {
-  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+  if (xmlHttp.readyState==4 && xmlHttp.status==200)
     {
-    document.getElementById("txtHint").innerHTML=xmlhttp.responseText;
+    	//alert(xmlHttp.responseText);
+    document.getElementById("testHint").innerHTML=xmlHttp.responseText;
     }
   }
 xmlHttp.open("GET",url,true);
-xmlHttp.send(null);
+xmlHttp.send();
 }
 
 function GetXmlHttpObject()
@@ -32,6 +34,7 @@ try
  {
  // Firefox, Opera 8.0+, Safari
  A=new XMLHttpRequest();
+ //document.getElementById("testHint").innerHTML="1111";
  }
 catch (e)
  {
@@ -39,10 +42,12 @@ catch (e)
  try
   {
   A=new ActiveXObject("Msxml2.XMLHTTP");
+  document.getElementById("testHint").innerHTML="2222";
   }
  catch (e)
   {
   A=new ActiveXObject("Microsoft.XMLHTTP");
+  document.getElementById("testHint").innerHTML="3333";
   }
  }
 return A;
