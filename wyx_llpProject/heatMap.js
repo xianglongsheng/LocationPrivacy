@@ -11,7 +11,7 @@ if (xmlHttp==null)
  alert ("Browser does not support HTTP Request");
  return;
  }
-var url="forTest.php";
+var url="getLocation.php";
 //url=url+"?q="+str;
 url=url+"?t="+Math.random();
 //document.getElementById("testHint").innerHTML="Now Here";
