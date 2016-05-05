@@ -1,5 +1,5 @@
 <?php
-echo "start</br>";
+echo "start";
 $servername = "localhost";
 $username = "root";
 $password = "Besafe";
@@ -11,13 +11,13 @@ $conn = new mysqli($servername, $username, $password);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
-echo "Connected successfully</br>";
-echo "here1<br>";
+echo "<br>Connected successfully";
+echo "<br>here1";
 $sql = "use llproject";
 if ($conn->query($sql) === TRUE) {
-    echo "Database selected successfully<br>";
+    echo "<br>Database selected successfully";
 } else {
-    echo "Error selecting database: " . $conn->error;
+    echo "<br>Error selecting database: " . $conn->error;
 }
 $sql = "SELECT longitude,latitude,count(*) as count_num FROM location group by longitude,latitude";
 $result = $conn->query($sql);
@@ -39,7 +39,7 @@ if ($result->num_rows > 0) {
 	 }
 	echo "</table>";
 } else {
-    echo "0 results";
+    echo "<br>0 results";
 }
 $conn->close();
 ?>
