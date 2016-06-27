@@ -23,8 +23,9 @@ xmlHttp.onreadystatechange=function()
     document.getElementById("testHint").innerHTML=xmlHttp.responseText;
     }
   }
-xmlHttp.open("GET",url,true);
+xmlHttp.open("GET",url,false);
 xmlHttp.send();
+
 }
 
 function GetXmlHttpObject()
