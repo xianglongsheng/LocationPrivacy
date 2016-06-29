@@ -122,8 +122,12 @@
         return pps;
     }
     function renewData(){
-        var pps=newData();
-    	var np=K;
+        var pps = newData();
+    	var np = 0;
+    	var allcount = 0;
+    	for(var i=0;i < pps.length;i++){
+    		allcount += pps[i][2];
+    	}
     	var pointB = new BMap.Point((central.getPosition()).lng,(central.getPosition()).lat);
         for (var i=1;i<pps.length;i++){
         	var pointA1 = new BMap.Point(Number(pps[i][0]),Number(pps[i][1]));
@@ -139,6 +143,15 @@
             	pps[j+1] = x;
             	//np += Number(pps[i][2]);
             }
+        }
+        if(K >= allcount)
+        	np = pps.length-1;
+        else{
+        	allcount = 0;
+        	for(var i=0;allcount < K;i++){
+        		allcount += pps[i][2];
+        	}
+        	np = i;
         }
         var mindis = map.getDistance(new BMap.Point(Number(pps[np][0]),Number(pps[np][1])),pointB);
         rad = maxNum(mindis,200);
