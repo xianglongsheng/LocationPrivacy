@@ -1,11 +1,8 @@
 <?php
-//$q=$_GET["q"];
-//echo "start<br>";
 $servername = "localhost";
 $username = "root";
 $password = "Besafe";
 
-// 创建连接
 $conn = new mysqli($servername, $username, $password);
 
 // 检测连接

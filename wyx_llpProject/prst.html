@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	<style type="text/css">
+		body, html{width: 100%;height: 100%;margin:0;font-family:"微软雅黑";}
+		#allmap{height:500px;width:100%;}
+		#r-result{width:100%;}
+	</style>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=MxXklrp4XK536PCzRj26D00zmnwBi6iK"></script>
+	<title>User</title>
+</head>
+<body>
+	<div id="allmap"></div>
+	<div id="r-result">
+		<!--<input type="button" onclick="add_overlay();" value="添加覆盖物" />-->
+		<input type="button" onclick="renewData();" value="请求位置" />
+	</div>
+	<p id="textEx">Here!</p>
+	<form>
+		<select id="valueOFk" onchange="getSelectedValue(this);">
+			<option value="1">50</option>
+			<option value="2">200</option>
+			<option selected value="3">500</option>
+			<option value="4">1000</option>
+			<option value="5">2000</option>
+	</select>
+	</form>
+
+<script type="text/javascript">
+	var K = 500;
+	var rad = 500;
+	function getSelectedValue(obj){
+		var sValue = obj.options[obj.options.selectedIndex].value; //这是取值
+		var sText = obj.options[obj.options.selectedIndex].innerHTML;
+		K = Number(sText);
+    }
+
+    function maxNum(a,b){
+    	if(a < b)
+    		return b;
+    	else
+    		return a;
+    }
+</script>
+
+<script type="text/javascript">
+	// 百度地图API功能
+	var map = new BMap.Map("allmap",{enableMapClick:false});
+	var point = new BMap.Point(117.262205, 31.844365);
+	map.centerAndZoom(point, 16);
+	map.enableScrollWheelZoom();
+
+	//var marker = new BMap.Marker(new BMap.Point(116.404, 39.915)); // 创建点
+	var central;
+	var circle;
+	map.addEventListener("click", showInfo);
+
+	function showInfo(e){
+		central = new BMap.Marker(e.point);
+		//var myIcon = new BMap.Icon("http://developer.baidu.com/map/jsdemo/img/fox.gif", new BMap.Size(300,157));
+		circle = new BMap.Circle(e.point,rad,{strokeColor:"blue", strokeWeight:2, strokeOpacity:0.5});
+		map.addOverlay(circle);
+		map.addOverlay(central);
+		central.setAnimation(BMAP_ANIMATION_BOUNCE);
+		map.removeEventListener("click",showInfo);
+		setInterval(function(){
+			map.clearOverlays();
+			var randpt;
+			do{
+				randpt = new BMap.Point(e.point.lng+Math.random()*0.006-0.003, e.point.lat+Math.random()*0.006-0.003);
+			}
+			while(map.getDistance(randpt,e.point) > (rad * 0.85));
+			//var marker = new BMap.Marker(randpt,{icon:myIcon});
+			var marker = new BMap.Marker(randpt);
+			map.addOverlay(circle);
+			map.addOverlay(marker);            //增加点
+			marker.setAnimation(BMAP_ANIMATION_BOUNCE);
+		},1500);
+	}
+
+	//var circle = new BMap.Circle(central,500,{strokeColor:"blue", strokeWeight:2, strokeOpacity:0.5}); //创建圆
+
+	/*function pointJump(p){
+		map.clearOverlays();
+		var marker = new BMap.Marker(new BMap.Point(p.lng+Math.random()*0.005-0.0025, p.lat+Math.random()*0.005-0.0025));
+		map.addOverlay(circle);
+		map.addOverlay(marker);            //增加点
+		marker.setAnimation(BMAP_ANIMATION_BOUNCE);
+	}*/
+
+	//添加覆盖物
+	function add_overlay(){
+		map.addOverlay(circle);            //增加圆
+		var marker = new BMap.Marker(new BMap.Point(116.404+Math.random()*0.005-0.0025, 39.915+Math.random()*0.005-0.0025));
+		map.addOverlay(marker);            //增加点
+		marker.setAnimation(BMAP_ANIMATION_BOUNCE);
+		setInterval(pointJump,1500);
+		//map.addOverlay(polyline);          //增加折线
+		//map.addOverlay(polygon);           //增加多边形
+		//map.addOverlay(rectangle);         //增加矩形
+	}
+	//清除覆盖物
+	function remove_overlay(){
+		map.clearOverlays();         
+	}
+</script>
+
+<script type="text/javascript" src="upload.js"></script>
+<script type="text/javascript">
+    function newData(){
+        getData();
+        var pp;
+        var pps=[];
+        pp=xmlHttp.responseText.split("<br>");
+        pp.pop();
+        for (var x of pp){
+            if(x === "");
+            else pps.push(x.split(" "));
+        }
+        return pps;
+    }
+    function renewData(){
+        var pps = newData();
+    	var np = 0;
+    	var allcount = 0;
+    	for(var i=0;i < pps.length;i++){
+    		allcount += pps[i][2];
+    	}
+    	var pointB = new BMap.Point((central.getPosition()).lng,(central.getPosition()).lat);
+        for (var i=1;i<pps.length;i++){
+        	var pointA1 = new BMap.Point(Number(pps[i][0]),Number(pps[i][1]));
+        	var pointA2 = new BMap.Point(Number(pps[i-1][0]),Number(pps[i-1][1]));
+            if(map.getDistance(pointA1,pointB) < map.getDistance(pointA2,pointB)){
+            	var j = i-1;
+            	var x = pps[i];
+            	//pointA1 = pointA2;
+            	while(j>=0 && map.getDistance(pointA1,pointB)<map.getDistance(new BMap.Point(Number(pps[j][0]),Number(pps[j][1])),pointB)){
+            		pps[j+1] = pps[j];
+            		j--;
+            	}
+            	pps[j+1] = x;
+            	//np += Number(pps[i][2]);
+            }
+        }
+        if(K >= allcount)
+        	np = pps.length-1;
+        else{
+        	allcount = 0;
+        	for(var i=0;allcount < K;i++){
+        		allcount += pps[i][2];
+        	}
+        	np = i;
+        }
+        var mindis = map.getDistance(new BMap.Point(Number(pps[np][0]),Number(pps[np][1])),pointB);
+        rad = maxNum(mindis,200);
+        circle = new BMap.Circle(pointB,rad,{strokeColor:"blue", strokeWeight:2, strokeOpacity:0.5});
+        //document.getElementById("textEx").innerHTML=np;
+        /*if(np >= minK && np <= maxK)
+        	document.getElementById("textEx").innerHTML="OK!";
+        else if(np < minK)
+        	document.getElementById("textEx").innerHTML="make it Bigger";
+        else
+        	document.getElementById("textEx").innerHTML="make it Smaller";*/
+    }
+</script>
+</body>
+</html>

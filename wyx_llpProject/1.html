@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=MxXklrp4XK536PCzRj26D00zmnwBi6iK"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=xxx"></script>
     <script type="text/javascript" src="http://api.map.baidu.com/library/Heatmap/2.0/src/Heatmap_min.js"></script>
     <title>热力图功能示例</title>
     <style type="text/css">
@@ -21,8 +21,19 @@
 	</div>
     <br>
     <p id="testHint">Fail!</p>
-        <button onclick="getData()">初始化</button>
+        <!--<button onclick="getData()">初始化</button>-->
     <script type="text/javascript" src="heatMap.js"></script>
+    <script type="text/javascript">
+        getData();
+        var pp;
+        var pps=[];
+        pp=xmlHttp.responseText.split("<br>");
+        pp.pop();
+        for (var x of pp){
+            if(x === "");
+            else pps.push(x.split(" "));
+        }
+    </script>
 </body>
 </html>
 <script type="text/javascript">
@@ -32,7 +43,12 @@
     map.centerAndZoom(point, 15);             // 初始化地图，设置中心点坐标和地图级别
     map.enableScrollWheelZoom(); // 允许滚轮缩放
   
-    var points =[
+    var points=[];
+    for (var i=0;i<pps.length;i++){
+        var x={"lng":Number(pps[i][0]),"lat":Number(pps[i][1]),"count":Number(pps[i][2])};
+        points.push(x);
+    }
+    /*var points =[
     {"lng":116.418261,"lat":39.921984,"count":50},
     {"lng":116.423332,"lat":39.916532,"count":51},
     {"lng":116.419787,"lat":39.930658,"count":15},
@@ -123,7 +139,7 @@
     {"lng":116.41905,"lat":39.929217,"count":12},
     {"lng":116.424579,"lat":39.914987,"count":57},
     {"lng":116.42076,"lat":39.915251,"count":70},
-    {"lng":116.425867,"lat":39.918989,"count":8}];
+    {"lng":116.425867,"lat":39.918989,"count":8}];*/
    
     if(!isSupportCanvas()){
     	alert('热力图目前只支持有canvas支持的浏览器,您所使用的浏览器不能使用热力图功能~')

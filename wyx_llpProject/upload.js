@@ -1,7 +1,4 @@
 var xmlHttp;
-function Test(){
-	document.getElementById("testHint").innerHTML="Success";
-}
 
 function getData()
 { 
@@ -11,16 +8,16 @@ if (xmlHttp==null)
  alert ("Browser does not support HTTP Request");
  return;
  }
-var url="getLocation.php";
+var url="sendLoc.php";
 //url=url+"?q="+str;
 url=url+"?t="+Math.random();
-//document.getElementById("testHint").innerHTML="Now Here";
+//document.getElementById("textEx").innerHTML="Now Here";
 xmlHttp.onreadystatechange=function()
   {
   if (xmlHttp.readyState==4 && xmlHttp.status==200)
     {
-    	//alert(xmlHttp.responseText);
-    document.getElementById("testHint").innerHTML=xmlHttp.responseText;
+    	//alert("Ready");
+      //document.getElementById("textEx").innerHTML=xmlHttp.responseText;
     }
   }
 xmlHttp.open("GET",url,false);
@@ -35,7 +32,7 @@ try
  {
  // Firefox, Opera 8.0+, Safari
  A=new XMLHttpRequest();
- //document.getElementById("testHint").innerHTML="1111";
+ //document.getElementById("textEx").innerHTML="1111";
  }
 catch (e)
  {
@@ -43,12 +40,12 @@ catch (e)
  try
   {
   A=new ActiveXObject("Msxml2.XMLHTTP");
-  document.getElementById("testHint").innerHTML="2222";
+  document.getElementById("textEx").innerHTML="2222";
   }
  catch (e)
   {
   A=new ActiveXObject("Microsoft.XMLHTTP");
-  document.getElementById("testHint").innerHTML="3333";
+  document.getElementById("textEx").innerHTML="3333";
   }
  }
 return A;
